@@ -31,11 +31,15 @@ const userSchema = new mongoose.Schema({
     enum: ["admin", "user", "seller"],
     default: "user",
   },
+  status: {
+    type: String,
+    enum: ["active", "blocked", "deleted"],
+    default: "active",
+  },
   password: {
     type: String,
     required: true,
     minlength: 6,
-    select: false,
   },
 });
 
