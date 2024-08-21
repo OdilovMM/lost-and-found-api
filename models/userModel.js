@@ -5,17 +5,17 @@ const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Name is required"],
+    required: [true, "Iltimos, Ism kiriting"],
     unique: true,
     minLength: 3,
     maxLength: 15,
   },
   email: {
     type: String,
-    required: [true, "Email is required"],
+    required: [true, "Email kiritilishi kerak"],
     validate: {
       validator: validator.isEmail,
-      message: "Please provide valid email",
+      message: "Togri email kiriting",
     },
     unique: true,
     minLength: 3,
@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   },
   mobile: {
     type: String,
-    required: [true, "Mobile is required"],
+    required: [true, "Telefon raqam majburiy"],
     unique: true,
   },
   role: {
