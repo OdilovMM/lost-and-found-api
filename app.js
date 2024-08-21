@@ -15,11 +15,11 @@ const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const authRouter = require("./routes/authRoutes.js");
 const itemRouter = require("./routes/itemRoutes.js");
-
+const claimRouter = require("./routes/claimRoutes.js");
 
 app.use(express.static("./public"));
 app.use(express.json());
-app.use(fileUpload({ useTempFiles: true }));
+app.use(fileUpload());
 app.use(cookieParser(process.env.JWT_SECRET));
 
 app.set("trust proxy", 1);
@@ -59,7 +59,7 @@ app.get("/api/v1/test-api", (req, res) => {
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/items", itemRouter);
-
+app.use("/api/v1/claims", claimRouter);
 
 // Global Errors
 app.use(notFoundMiddleware);

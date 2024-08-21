@@ -5,7 +5,7 @@ const foundItemSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  pictureURL: {
+  photo: {
     type: String,
     required: [true, "Iltimos, rasm yuklang"],
   },
@@ -101,7 +101,7 @@ const foundItemSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["open", "pending", "claimed"],
+    enum: ["open", "claimed"],
     default: "open",
   },
   createdAt: {

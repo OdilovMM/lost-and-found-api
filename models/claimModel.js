@@ -22,6 +22,12 @@ const claimSchema = new mongoose.Schema({
   message: {
     type: String,
   },
+  name: {
+    type: String,
+  },
+  mobile: {
+    type: String,
+  },
   status: {
     type: String,
     enum: ["pending", "verified", "rejected"],
