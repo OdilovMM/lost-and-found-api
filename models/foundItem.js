@@ -4,11 +4,14 @@ const foundItemSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
   },
   pictureURL: {
     type: String,
     required: [true, "Iltimos, rasm yuklang"],
+  },
+  name: {
+    type: String,
+    required: [true, "Iltimos, topilgan buyum nomini kiriting"],
   },
   location: {
     type: String,
@@ -51,6 +54,23 @@ const foundItemSchema = new mongoose.Schema({
     ],
     required: [true, "Iltimos, shaharni kiriting"],
   },
+  category: {
+    type: String,
+    enum: [
+      "Elektronikalar",
+      "Kiyimlar",
+      "Zargarlik-buyumlari",
+      "Shaxsiy",
+      "Hujatlar",
+      "Kalitlar",
+      "Sumkalar",
+      "Sport",
+      "Uy anjomlari",
+      "Boshqalar",
+    ],
+    default: "Boshqalar",
+    required: true,
+  },
   street: {
     type: String,
     required: [true, "Iltimos, kocha nomini kiriting"],
@@ -81,7 +101,7 @@ const foundItemSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["open", "claimed"],
+    enum: ["open", "pending", "claimed"],
     default: "open",
   },
   createdAt: {

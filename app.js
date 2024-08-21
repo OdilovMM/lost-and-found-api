@@ -14,6 +14,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const authRouter = require("./routes/authRoutes.js");
+const itemRouter = require("./routes/itemRoutes.js");
 
 
 app.use(express.static("./public"));
@@ -57,6 +58,7 @@ app.get("/api/v1/test-api", (req, res) => {
 
 // Routes
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/items", itemRouter);
 
 
 // Global Errors

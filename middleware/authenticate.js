@@ -1,24 +1,29 @@
 const { UnauthenticatedError, UnauthorizedError } = require("../errors");
-const { verifyMyToken, attachCookieResponse } = require("../utils/jwt");
+const { verifyMyToken } = require("../utils/jwt");
 
 // only logged users
 const isLoggedIn = async (req, res, next) => {
-  const { token } = req.signedCookies;
+  const token = req.signedCookies.token;
+  console.log("Signed Token:", token);
+
+  if (!token) {
+    throw new UnauthenticatedError("You are not logged in. Please, Log in");
+  }
 
   try {
-    if (token) {
-      const payload = verifyMyToken(token);
-      req.user = payload.user;
-      return next();
-    }
-    throw new UnauthenticatedError("Authentication failed");
+    const { name, userId, role } = verifyMyToken(token);
+    req.user = { name: name, userId: userId, role: role };
+    console.log("User:", req.user);
+    next();
   } catch (error) {
+    console.error('Token verification error:', error);
     throw new UnauthenticatedError("You are not logged in. Please, Log in");
   }
 };
 
 // Role based authorization
 const allowTo = (...roles) => {
+  console.log("Roles allowed:", roles);
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       throw new UnauthenticatedError(
