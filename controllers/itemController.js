@@ -75,11 +75,11 @@ const getAllItems = async (req, res) => {
   }
 
   if (street) {
-    queryObject.street = { $regex: street, $options: "i" }; // Case-insensitive street search
+    queryObject.street = { $regex: street, $options: "i" }; 
   }
 
   if (foundDate) {
-    queryObject.foundDate = new Date(foundDate); // Searches by exact date
+    queryObject.foundDate = new Date(foundDate); 
   }
 
   let result = Item.find(queryObject);
@@ -97,7 +97,6 @@ const getAllItems = async (req, res) => {
   }
   const skip = (page - 1) * limit;
   result = result.skip(skip).limit(Number(limit));
-
   const items = await result;
   res.status(StatusCodes.OK).json({ items, count: items.length });
 };
@@ -106,20 +105,28 @@ const updateFoundItem = async (req, res) => {
   const { itemId } = req.params;
   const { status } = req.body;
 
-  const item = await Review.findOne({ _id: itemId });
-
+  const item = await Item.findOne({ _id: itemId });
   if (!item) {
     throw new NotFoundError("No item found with that ID");
   }
   isAllowedTo(req.user, item.userId);
   item.status = status;
   await item.save();
-
   res.status(StatusCodes.OK).json({ msg: "Davo holati yangilandi!", item });
+};
+
+const getSingleItem = async (req, res) => {
+  const { itemId } = req.params;
+  const item = await Item.findOne({ _id: itemId });
+  if (!item) {
+    throw new NotFoundError("No item found with that ID");
+  }
+  res.status(StatusCodes.OK).json({ item });
 };
 
 module.exports = {
   postItem,
   getAllItems,
   updateFoundItem,
+  getSingleItem,
 };

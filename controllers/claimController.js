@@ -1,11 +1,7 @@
 const Claim = require("../models/claimModel");
 const Item = require("../models/foundItem");
 const { StatusCodes } = require("http-status-codes");
-const {
-  BadRequestError,
-  NotFoundError,
-  UnauthenticatedError,
-} = require("../errors");
+const { BadRequestError, NotFoundError } = require("../errors");
 
 const createClaim = async (req, res) => {
   const { itemId, firstAnswer, secondAnswer, message, name, mobile } = req.body;
@@ -14,7 +10,6 @@ const createClaim = async (req, res) => {
   if (!item) {
     throw new NotFoundError("Topilgan buyum mavjud emas");
   }
-
   const existingClaim = await Claim.findOne({
     itemId,
     userId: req.user.userId,
@@ -47,7 +42,6 @@ const getClaimsForItem = async (req, res) => {
   }
 
   const claims = await Claim.find({ itemId }).populate("userId", "name email");
-
   res.status(StatusCodes.OK).json({ claims, count: claims.length });
 };
 
@@ -62,10 +56,8 @@ const updateClaimStatus = async (req, res) => {
 
   claim.status = status;
   await claim.save();
-
   res.status(StatusCodes.OK).json({ msg: "Da'vo holati yangilandi", claim });
 };
-
 
 module.exports = {
   createClaim,
