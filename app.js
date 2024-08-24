@@ -16,6 +16,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 const authRouter = require("./routes/authRoutes.js");
 const itemRouter = require("./routes/itemRoutes.js");
 const claimRouter = require("./routes/claimRoutes.js");
+const userRouter = require("./routes/userRoutes.js");
 
 app.use(express.static("./public"));
 app.use(express.json());
@@ -36,7 +37,7 @@ app.use("/api", limiter);
 app.use(helmet());
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -60,6 +61,7 @@ app.get("/api/v1/test-api", (req, res) => {
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/items", itemRouter);
 app.use("/api/v1/claims", claimRouter);
+app.use("/api/v1/user", userRouter);
 
 // Global Errors
 app.use(notFoundMiddleware);

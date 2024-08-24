@@ -2,7 +2,6 @@ const { CustomAPIError, NotFoundError, BadRequestError } = require("../errors");
 const Item = require("../models/foundItem");
 const { StatusCodes } = require("http-status-codes");
 const isAllowedTo = require("../utils/isAllowedTo");
-const uuid = require("uuid");
 const path = require("path");
 const fs = require("fs");
 
@@ -27,19 +26,15 @@ const postItem = async (req, res) => {
     userId: req.user.userId,
     photo: `/uploads/${path.basename(photoPath)}`,
     name: req.body.name,
-    location: req.body.location,
     region: req.body.region,
     city: req.body.city,
     street: req.body.street,
     orientation: req.body.orientation,
-    address: req.body.address,
     category: req.body.category,
     foundDate: req.body.foundDate,
     contactNumber: req.body.contactNumber,
-    firstQuestion: req.body.firstQuestion,
-    secondQuestion: req.body.secondQuestion,
   });
-  res.status(StatusCodes.CREATED).json({ msg: "A new Item added", newItem });
+  res.status(StatusCodes.CREATED).json({ msg: "Yangi topilma qo'shildi", newItem });
 };
 
 const getAllItems = async (req, res) => {
@@ -51,7 +46,7 @@ const getAllItems = async (req, res) => {
     street,
     foundDate,
     page = 1,
-    limit = 10,
+    limit = 12,
     sort,
     fields,
   } = req.query;
@@ -61,25 +56,24 @@ const getAllItems = async (req, res) => {
   if (name) {
     queryObject.name = { $regex: name, $options: "i" };
   }
-
-  if (category) {
+  if (category && category !== "Hammasi") {
     queryObject.category = category;
   }
 
-  if (city) {
+  if (city && city !== "Hammasi") {
     queryObject.city = city;
   }
 
-  if (region) {
+  if (region && region !== "Hammasi") {
     queryObject.region = region;
   }
 
-  if (street) {
-    queryObject.street = { $regex: street, $options: "i" }; 
+  if (street && street !== "Hammasi") {
+    queryObject.street = { $regex: street, $options: "i" };
   }
 
   if (foundDate) {
-    queryObject.foundDate = new Date(foundDate); 
+    queryObject.foundDate = new Date(foundDate);
   }
 
   let result = Item.find(queryObject);
@@ -95,10 +89,69 @@ const getAllItems = async (req, res) => {
     const fieldList = fields.split(",").join(" ");
     result = result.select(fieldList);
   }
-  const skip = (page - 1) * limit;
+  const pageNum = parseInt(page);
+  const limitNum = parseInt(limit);
+  const skip = (pageNum - 1) * limitNum;
+
   result = result.skip(skip).limit(Number(limit));
   const items = await result;
-  res.status(StatusCodes.OK).json({ items, count: items.length });
+  const total = await Item.countDocuments(queryObject);
+  const totalPages = Math.ceil(total / limitNum);
+
+  res.status(StatusCodes.OK).json({
+    items,
+    meta: {
+      pagination: {
+        page: pageNum,
+        pageSize: limitNum,
+        pageCount: totalPages,
+        total,
+      },
+      category: [
+        "Hammasi",
+        "Elektronikalar",
+        "Kiyimlar",
+        "Zargarlik-buyumlari",
+        "Shaxsiy",
+        "Hujatlar",
+        "Kalitlar",
+        "Sumkalar",
+        "Sport",
+        "Uy anjomlari",
+        "Boshqalar",
+      ],
+      region: [
+        "Hammasi",
+        "Toshkent",
+        "Andijon",
+        "Buxoro",
+        "Jizzax",
+        "Qarshi",
+        "Nukus",
+        "Namangan",
+        "Samarkand",
+        "Sirdaryo",
+        "Surxondaryo",
+        "Fargʻona",
+        "Xorazm",
+      ],
+      city: [
+        "Hammasi",
+        "Toshkent",
+        "Andijon",
+        "Buxoro",
+        "Jizzax",
+        "Qarshi",
+        "Nukus",
+        "Namangan",
+        "Samarkand",
+        "Sirdaryo",
+        "Surxondaryo",
+        "Fargʻona",
+        "Xorazm",
+      ],
+    },
+  });
 };
 
 const updateFoundItem = async (req, res) => {
@@ -107,7 +160,7 @@ const updateFoundItem = async (req, res) => {
 
   const item = await Item.findOne({ _id: itemId });
   if (!item) {
-    throw new NotFoundError("No item found with that ID");
+    throw new NotFoundError("Hech narsa toplimadi");
   }
   isAllowedTo(req.user, item.userId);
   item.status = status;

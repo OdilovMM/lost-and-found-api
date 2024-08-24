@@ -1,4 +1,4 @@
-const { CustomAPIError, UnauthenticatedError } = require("../errors");
+const {  UnauthenticatedError } = require("../errors");
 
 const isAllowedTo = (requestUser, resourceUserId) => {
   if (requestUser.role === "admin") return;
