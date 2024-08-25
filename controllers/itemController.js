@@ -1,7 +1,5 @@
-const { CustomAPIError, NotFoundError, BadRequestError } = require("../errors");
 const Item = require("../models/foundItem");
 const { StatusCodes } = require("http-status-codes");
-const isAllowedTo = require("../utils/isAllowedTo");
 const path = require("path");
 const fs = require("fs");
 
@@ -162,7 +160,7 @@ const updateFoundItem = async (req, res) => {
   if (!item) {
     throw new NotFoundError("Hech narsa toplimadi");
   }
-  isAllowedTo(req.user, item.userId);
+  // isAllowedTo(req.user, item.userId);
   item.status = status;
   await item.save();
   res.status(StatusCodes.OK).json({ msg: "Davo holati yangilandi!", item });
