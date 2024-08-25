@@ -10,12 +10,14 @@ class UserService {
   }
 
   async getAuthorItems(userId) {
-    const my_posts = await this.itemModel.findById(userId).populate("items");
-    const my_posts_length = await this.itemModel
+    const my_posts = await this.userModel
+      .findById(userId)
+      .populate("items")
+      .select("-__v -status -role -mobile -email -name");
+    const my_posts_length = await this.userModel
       .findById(userId)
       .populate("items")
       .countDocuments();
-
     return { my_posts, my_posts_length };
   }
 

@@ -5,12 +5,14 @@ const bunyan = require("bunyan");
 const log = bunyan.createLogger({ name: "ItemController" });
 
 exports.postItem = async (req, res, next) => {
+  console.log('req.user:::',req.user.id)
   try {
     const newItem = await ItemService.createItem(
       req.body,
       req.files,
-      req.user.userId
+      req.user.id
     );
+
     res
       .status(StatusCodes.CREATED)
       .json({ msg: "Yangi topilma qo'shildi", newItem });

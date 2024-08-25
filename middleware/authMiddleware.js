@@ -4,14 +4,15 @@ const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 
-const signToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+const signToken = (user) => {
+  return jwt.sign(user, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
 
 exports.createSendToken = (user, statusCode, res) => {
   const token = signToken({ userId: user._id, role: user.role });
+  console.log(token);
   const cookieExpiresInDays = Number(process.env.JWT_COOKIE_EXPIRES_IN) || 7;
 
   const cookieOptions = {
@@ -34,6 +35,7 @@ exports.createSendToken = (user, statusCode, res) => {
 exports.protected = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
   let token;
+  console.log(token);
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -49,6 +51,7 @@ exports.protected = catchAsync(async (req, res, next) => {
 
   // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  console.log("decoded", decoded);
 
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.userId);
@@ -62,6 +65,7 @@ exports.protected = catchAsync(async (req, res, next) => {
   }
 
   req.user = currentUser;
+  console.log("currentUser", currentUser);
   next();
 });
 
