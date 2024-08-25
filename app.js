@@ -38,7 +38,10 @@ app.use(helmet());
 app.use(
   cors({
     // origin: "http://localhost:5173",
-    origin: "https://losnt-frontend-fxowz31jp-odilovmms-projects.vercel.app",
+    origin:
+      "https://losnt-frontend-wn6u-git-deploy-odilovmms-projects.vercel.app/",
+    origin:
+      "https://losnt-frontend-wn6u-git-deploy-odilovmms-projects.vercel.app",
     credentials: true,
   })
 );
