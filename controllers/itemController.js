@@ -1,6 +1,8 @@
 const Item = require("../models/foundItem");
 const { StatusCodes } = require("http-status-codes");
 const ItemService = require("../service/ItemService");
+const bunyan = require("bunyan");
+const log = bunyan.createLogger({ name: "ItemController" });
 
 exports.postItem = async (req, res, next) => {
   try {
@@ -13,6 +15,7 @@ exports.postItem = async (req, res, next) => {
       .status(StatusCodes.CREATED)
       .json({ msg: "Yangi topilma qo'shildi", newItem });
   } catch (error) {
+    log.error(error);
     next(error);
   }
 };
@@ -77,6 +80,7 @@ exports.getAllItems = async (req, res, next) => {
       },
     });
   } catch (error) {
+    log.error(error);
     next(error);
   }
 };
@@ -92,13 +96,13 @@ exports.updateFoundItem = async (req, res, next) => {
   }
 };
 
-
 exports.getSingleItem = async (req, res, next) => {
   try {
     const { itemId } = req.params;
     const item = await ItemService.getItemById(itemId);
     res.status(StatusCodes.OK).json({ item });
   } catch (error) {
+    log.error(error);
     next(error);
   }
 };

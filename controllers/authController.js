@@ -1,9 +1,9 @@
 const catchAsync = require("./../utils/catchAsync");
 const authService = require("../service/authService");
-const bunyan = require("bunyan");
 const { createSendToken } = require("../middleware/authMiddleware");
-
+const bunyan = require("bunyan");
 const log = bunyan.createLogger({ name: "authController" });
+
 
 exports.register = catchAsync(async (req, res, next) => {
   const data = req.body;
@@ -20,7 +20,6 @@ exports.login = catchAsync(async (req, res, next) => {
   const data = req.body;
   try {
     const user = await authService.loginData(data);
-    console.log(user);
     createSendToken(user, 200, res);
   } catch (error) {
     log.error(error);

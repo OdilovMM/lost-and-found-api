@@ -1,36 +1,32 @@
-const { BadRequestError, UnauthenticatedError } = require("../errors");
-const User = require("../models/userModel");
-const Items = require("../models/foundItem");
 const { StatusCodes } = require("http-status-codes");
+const UserService = require("../service/UserService");
+const bunyan = require("bunyan");
+const log = bunyan.createLogger({ name: "UserController" });
 
-const getAllMyItems = async (req, res) => {
+exports.getAllMyItems = async (req, res, next) => {
   const userId = req.user.userId;
-  const my_posts = await User.findById(userId).populate("items");
-  const my_posts_length = await User.findById(userId)
-    .populate("items")
-    .countDocuments();
-
-  res.status(StatusCodes.OK).json({
-    my_posts_length,
-    my_posts,
-  });
+  try {
+    const { my_posts, my_posts_length } =
+      await UserService.getAuthorItems(userId);
+    res.status(StatusCodes.OK).json({
+      my_posts,
+      my_posts_length,
+    });
+  } catch (error) {
+    log.error(error);
+    next(error);
+  }
 };
 
-const updateMyPostStatus = async (req, res) => {
+exports.updateMyPostStatus = async (req, res, next) => {
   const { itemId } = req.params;
   const { status } = req.body;
-  const item = await Items.findById(itemId);
-  if (item.userId.toString() !== req.user.userId.toString()) {
-    throw new UnauthenticatedError("Mumkin emas! Taqiqlangan");
+
+  try {
+    await UserService.updateAuthorItemStatus(itemId, req.user.userId, status);
+    res.status(StatusCodes.OK).json({ msg: "Status yangilandi" });
+  } catch (error) {
+    log.error(error);
+    next(error);
   }
-
-  item.status = status;
-  await item.save();
-
-  res.status(StatusCodes.OK).json({ msg: "Status yangilandi" });
-};
-
-module.exports = {
-  getAllMyItems,
-  updateMyPostStatus,
 };

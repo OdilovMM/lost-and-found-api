@@ -14,8 +14,8 @@ const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 const authRouter = require("./routes/authRoutes.js");
 const itemRouter = require("./routes/itemRoutes.js");
+const userRouter = require("./routes/userRoutes.js");
 // const claimRouter = require("./routes/claimRoutes.js");
-// const userRouter = require("./routes/userRoutes.js");
 
 app.use(express.static("./public"));
 app.use(express.json());
@@ -52,15 +52,15 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Test Routes
-app.get("/api/v1/test-api", (req, res) => {
+app.get("/api/v1/test", (req, res) => {
   res.send("Rest-API is working");
 });
 
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/items", itemRouter);
+app.use("/api/v1/user", userRouter);
 // app.use("/api/v1/claims", claimRouter);
-// app.use("/api/v1/user", userRouter);
 
 // Global Errors
 app.all("*", (req, res, next) => {
