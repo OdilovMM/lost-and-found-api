@@ -17,7 +17,17 @@ const getAllMyItems = async (req, res) => {
 };
 
 const updateMyPostStatus = async (req, res) => {
-  console.log(req.params);
+  const { itemId } = req.params;
+  const { status } = req.body;
+  const item = await Items.findById(itemId);
+  if (item.userId.toString() !== req.user.userId.toString()) {
+    throw new UnauthenticatedError("Mumkin emas! Taqiqlangan");
+  }
+
+  item.status = status;
+  await item.save();
+
+  res.status(StatusCodes.OK).json({ msg: "Status yangilandi" });
 };
 
 module.exports = {
