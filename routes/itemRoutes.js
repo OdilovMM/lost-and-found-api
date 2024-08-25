@@ -1,21 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const {
-  postItem,
-  getAllItems,
-  updateFoundItem,
-  getSingleItem,
-} = require("../controllers/itemController");
-const { isLoggedIn, allowTo } = require("../middleware/authenticate");
+const itemController = require("../controllers/itemController");
+const authMiddleware = require("../middleware/authMiddleware");
 
-router.post("/add-item", isLoggedIn, allowTo("user"), postItem);
-router.get("/all-items", getAllItems);
+router.post("/add-item", authMiddleware.protected, itemController.postItem);
+router.get("/all-items", itemController.getAllItems);
 router.patch(
   "/all-items/:itemId",
-  isLoggedIn,
-  allowTo("user"),
-  updateFoundItem
+  authMiddleware.protected,
+  itemController.updateFoundItem
 );
-router.get("/all-items/:itemId", getSingleItem);
+router.get("/all-items/:itemId", itemController.getSingleItem);
 
 module.exports = router;

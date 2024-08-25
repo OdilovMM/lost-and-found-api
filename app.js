@@ -13,7 +13,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 const authRouter = require("./routes/authRoutes.js");
-// const itemRouter = require("./routes/itemRoutes.js");
+const itemRouter = require("./routes/itemRoutes.js");
 // const claimRouter = require("./routes/claimRoutes.js");
 // const userRouter = require("./routes/userRoutes.js");
 
@@ -58,7 +58,7 @@ app.get("/api/v1/test-api", (req, res) => {
 
 // Routes
 app.use("/api/v1/auth", authRouter);
-// app.use("/api/v1/items", itemRouter);
+app.use("/api/v1/items", itemRouter);
 // app.use("/api/v1/claims", claimRouter);
 // app.use("/api/v1/user", userRouter);
 
