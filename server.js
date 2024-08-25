@@ -14,7 +14,7 @@ dotenv.config({ path: "./.env" });
 const app = require("./app");
 
 mongoose
-  .connect(process.env.DB_HOME, {})
+  .connect(process.env.DATABASE, {})
   .then(() => log.info("DB connection successful!"));
 
 const port = process.env.PORT || 3000;
@@ -27,5 +27,12 @@ process.on("unhandledRejection", (err) => {
   log.error(err.name, err.message);
   server.close(() => {
     process.exit(1);
+  });
+});
+
+process.on("SIGTERM", () => {
+  console.log("SIGTERM received");
+  server.close(() => {
+    console.log("Process stopped");
   });
 });

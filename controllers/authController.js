@@ -4,12 +4,11 @@ const { createSendToken } = require("../middleware/authMiddleware");
 const bunyan = require("bunyan");
 const log = bunyan.createLogger({ name: "authController" });
 
-
 exports.register = catchAsync(async (req, res, next) => {
   const data = req.body;
   try {
     const user = await authService.registerData(data);
-    createSendToken(user, 201, res);
+    createSendToken(user, 201, req, res);
   } catch (error) {
     log.error(error);
     next(error);
@@ -20,7 +19,7 @@ exports.login = catchAsync(async (req, res, next) => {
   const data = req.body;
   try {
     const user = await authService.loginData(data);
-    createSendToken(user, 200, res);
+    createSendToken(user, 200, req, res);
   } catch (error) {
     log.error(error);
     next(error);

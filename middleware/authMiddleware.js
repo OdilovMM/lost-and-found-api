@@ -10,18 +10,16 @@ const signToken = (user) => {
   });
 };
 
-exports.createSendToken = (user, statusCode, res) => {
+exports.createSendToken = (user, statusCode, req, res) => {
   const token = signToken({ userId: user._id, role: user.role });
   console.log(token);
   const cookieExpiresInDays = Number(process.env.JWT_COOKIE_EXPIRES_IN) || 7;
 
-  const cookieOptions = {
+  res.cookie("token", token, {
     expires: new Date(Date.now() + cookieExpiresInDays * 24 * 60 * 60 * 1000),
     httpOnly: true,
-  };
-  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
-
-  res.cookie("token", token, cookieOptions);
+    secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+  });
 
   user.password = undefined;
 

@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(fileUpload());
 app.use(cookieParser(process.env.JWT_SECRET || "defaultSecret"));
 
-app.set("trust proxy", 1);
+app.enable("trust proxy");
 
 // Limit requests from same API
 const limiter = rateLimit({
