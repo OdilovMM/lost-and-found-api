@@ -15,7 +15,7 @@ const attachCookieResponse = ({ res, user }) => {
   res.cookie("token", token, {
     httpOnly: true,
     expires: expires,
-    secure: req.secure || req.headers('x-forwarded-proto') === 'https',
+    secure: process.env.NODE_ENV === "production",
     signed: true,
   });
 };
