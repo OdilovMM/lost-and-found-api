@@ -39,8 +39,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://losnt-frontend-wn6u-git-deploy-odilovmms-projects.vercel.app/",
-      "https://losnt-frontend-wn6u.vercel.app",
+      "https://losnt-frontend.vercel.app",
     ],
     credentials: true,
   })
