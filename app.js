@@ -41,7 +41,7 @@ app.use(
     origin:
       "https://losnt-frontend-wn6u-git-deploy-odilovmms-projects.vercel.app/",
     origin:
-      "https://losnt-frontend-wn6u-git-deploy-odilovmms-projects.vercel.app",
+      "https://losnt-frontend-wn6u.vercel.app",
     credentials: true,
   })
 );
