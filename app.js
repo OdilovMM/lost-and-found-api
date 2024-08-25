@@ -36,7 +36,7 @@ app.use("/api", limiter);
 app.use(helmet());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://losnt-frontend.vercel.app"],
+    origin: ["http://localhost:5173", "https://lost-and-found-zeta.vercel.app"],
     credentials: true,
   })
 );
