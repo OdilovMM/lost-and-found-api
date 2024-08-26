@@ -31,11 +31,7 @@ const limiter = rateLimit({
   message: "Too many requests from this IP, please try again in an hour!",
 });
 app.use("/api", limiter);
-app.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-  })
-);
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 app.use("/api", limiter);
 app.use(helmet());
