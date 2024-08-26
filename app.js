@@ -8,7 +8,6 @@ const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
-const helmet = require("helmet");
 
 // error handler imports
 const AppError = require("./utils/appError");
