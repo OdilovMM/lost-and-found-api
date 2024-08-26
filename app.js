@@ -8,6 +8,7 @@ const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
 
 // error handler imports
 const AppError = require("./utils/appError");
@@ -31,6 +32,11 @@ const limiter = rateLimit({
   message: "Too many requests from this IP, please try again in an hour!",
 });
 app.use("/api", limiter);
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 
 app.use("/api", limiter);
 app.use(helmet());
