@@ -18,7 +18,6 @@ const userRouter = require("./routes/userRoutes.js");
 // const claimRouter = require("./routes/claimRoutes.js");
 
 app.use(express.static("./public"));
-app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(fileUpload());
 app.use(cookieParser(process.env.JWT_SECRET || "defaultSecret"));

@@ -24,7 +24,7 @@ class ItemService {
 
     const newItem = await this.itemModel.create({
       userId: userId,
-      photo: `/uploads/${path.basename(photoPath)}`,
+      photo: `/${path.basename(photoPath)}`,
       ...data,
     });
     console.log(newItem);
