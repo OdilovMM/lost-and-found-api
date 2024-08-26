@@ -27,6 +27,7 @@ class ItemService {
       photo: `/uploads/${path.basename(photoPath)}`,
       ...data,
     });
+    console.log(newItem);
 
     return newItem;
   }

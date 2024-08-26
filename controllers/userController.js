@@ -5,11 +5,9 @@ const log = bunyan.createLogger({ name: "UserController" });
 
 exports.getAllMyItems = async (req, res, next) => {
   const userId = req.user.id;
-  console.log("req.user:::", req.user);
   try {
     const { my_posts, my_posts_length } =
       await UserService.getAuthorItems(userId);
-    console.log("my_posts::", my_posts);
     res.status(StatusCodes.OK).json({
       my_posts,
       my_posts_length,

@@ -5,7 +5,6 @@ const bunyan = require("bunyan");
 const log = bunyan.createLogger({ name: "ItemController" });
 
 exports.postItem = async (req, res, next) => {
-  console.log('req.user:::',req.user.id)
   try {
     const newItem = await ItemService.createItem(
       req.body,

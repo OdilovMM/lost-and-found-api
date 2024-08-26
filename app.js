@@ -18,6 +18,7 @@ const userRouter = require("./routes/userRoutes.js");
 // const claimRouter = require("./routes/claimRoutes.js");
 
 app.use(express.static("./public"));
+app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(fileUpload());
 app.use(cookieParser(process.env.JWT_SECRET || "defaultSecret"));
@@ -30,7 +31,6 @@ const limiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   message: "Too many requests from this IP, please try again in an hour!",
 });
-app.use("/api", limiter);
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 app.use("/api", limiter);

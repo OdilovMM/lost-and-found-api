@@ -12,7 +12,6 @@ const signToken = (user) => {
 
 exports.createSendToken = (user, statusCode, req, res) => {
   const token = signToken({ userId: user._id, role: user.role });
-  console.log(token);
   const cookieExpiresInDays = Number(process.env.JWT_COOKIE_EXPIRES_IN) || 7;
 
   res.cookie("token", token, {
@@ -33,7 +32,6 @@ exports.createSendToken = (user, statusCode, req, res) => {
 exports.protected = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
   let token;
-  console.log(token);
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -49,7 +47,6 @@ exports.protected = catchAsync(async (req, res, next) => {
 
   // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log("decoded", decoded);
 
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.userId);
@@ -63,7 +60,6 @@ exports.protected = catchAsync(async (req, res, next) => {
   }
 
   req.user = currentUser;
-  console.log("currentUser", currentUser);
   next();
 });
 
